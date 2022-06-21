@@ -43,15 +43,15 @@ if __name__ == "__main__":
     #root.geometry("300x500")
     root.title("超高性能電卓")
 
-    entry = tk.Entry(root,justify="right",width=14,font=("Times New Roman",40))
-    entry.grid(row=0,column=0,columnspan=3)
+    entry = tk.Entry(root,justify="right",width=20,font=("Times New Roman",40))
+    entry.grid(row=0,column=0,columnspan=4)
     
     r,c = 1,0
-    for i,x in enumerate([i for i in range(9,-1,-1)]+["+","-","*","/","%","Q","=","C"]):
+    for i,x in enumerate([1,2,3,"C",4,5,6,"=",7,8,9,"*","+",0,"-"]+["/","%","Q"]):
         btn = tk.Button(root,text=x,width=6,height=1, font=("Times New Roman",30))
         btn.grid(row=r,column=c)
         c += 1
-        if (i+4)%3 == 0:
+        if (i+1)%4 == 0:
             r += 1
             c = 0
         btn.bind("<1>", button_click)
