@@ -1,3 +1,4 @@
+import random
 import tkinter as tk
 import tkinter.messagebox as tkm
 def button_click(event):
@@ -8,6 +9,22 @@ def button_click(event):
         res = eval(eqn)
         entry.delete(0,tk.END)
         entry.insert(tk.END, res)
+    elif x == "C":
+        entry.delete(0,tk.END)
+    elif x == "Q":
+        a = random.randint(1,9)
+        b = random.randint(1,9)
+        ques = f"{str(a)} * {str(b)}"
+        entry.delete(0,tk.END)
+        entry.insert(tk.END,ques)
+    #elif x == "%":
+        #eqn = entry.get()
+    #    par = "{:.0%}".format(entry)
+    #    pa = str(par)
+    #    entry.delete(0,tk.END)
+    #    entry.insert(tk.END,pa)
+
+
     else:
 
     #tkm.showinfo("",f"{x}のボタンがクリックされました")
@@ -26,15 +43,15 @@ if __name__ == "__main__":
     #root.geometry("300x500")
     root.title("超高性能電卓")
 
-    entry = tk.Entry(root,justify="right",width=10,font=("Times New Roman",40))
+    entry = tk.Entry(root,justify="right",width=14,font=("Times New Roman",40))
     entry.grid(row=0,column=0,columnspan=3)
-
+    
     r,c = 1,0
-    for i,x in enumerate([i for i in range(9,-1,-1)]+["+","="]):
-        btn = tk.Button(root,text=x,width=4,height=2, font=("Times New Roman",30))
+    for i,x in enumerate([i for i in range(9,-1,-1)]+["+","-","*","/","%","Q","=","C"]):
+        btn = tk.Button(root,text=x,width=6,height=1, font=("Times New Roman",30))
         btn.grid(row=r,column=c)
         c += 1
-        if (i+1)%3 == 0:
+        if (i+4)%3 == 0:
             r += 1
             c = 0
         btn.bind("<1>", button_click)
