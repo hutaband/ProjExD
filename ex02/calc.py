@@ -12,9 +12,11 @@ def button_click(event):
     elif x == "C":
         entry.delete(0,tk.END)
     elif x == "Q":
+        h = ["*","+","-","/"]
         a = random.randint(1,9)
         b = random.randint(1,9)
-        ques = f"{str(a)} * {str(b)}"
+        c = random.choice(h)
+        ques = f"{str(a)} {c} {str(b)}"
         entry.delete(0,tk.END)
         entry.insert(tk.END,ques)
     #elif x == "%":
