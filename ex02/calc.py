@@ -3,8 +3,21 @@ import tkinter.messagebox as tkm
 def button_click(event):
     btn = event.widget
     x = btn["text"]
+    if x == "=":
+        eqn = entry.get()
+        res = eval(eqn)
+        entry.delete(0,tk.END)
+        entry.insert(tk.END, res)
+    else:
+
     #tkm.showinfo("",f"{x}のボタンがクリックされました")
-    entry.insert(tk.END, x)
+        entry.insert(tk.END, x)
+
+#def button_sum(sum):
+  #  btn2 = sum.widget["text"]
+ #   if btn2 == "=":
+
+
 
 
 if __name__ == "__main__":
@@ -17,7 +30,7 @@ if __name__ == "__main__":
     entry.grid(row=0,column=0,columnspan=3)
 
     r,c = 1,0
-    for i,x in enumerate([i for i in range(9,-1,-1)]+["+"]):
+    for i,x in enumerate([i for i in range(9,-1,-1)]+["+","="]):
         btn = tk.Button(root,text=x,width=4,height=2, font=("Times New Roman",30))
         btn.grid(row=r,column=c)
         c += 1
