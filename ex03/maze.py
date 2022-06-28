@@ -2,6 +2,7 @@ import math
 import tkinter as tk
 from tkinter import font
 import maze_maker as mm
+import tkinter.messagebox as tkm
 
 def key_down(event):
     global key
@@ -14,7 +15,11 @@ def key_up(event):
 
 def main_proc():
     global mx,my,cx,cy,time
-    time = time-0.1           #１秒ずつ減る
+    time = time-0.1
+    if time < 0:
+        tkm.showinfo("迷えるこうかとん","GAMEOVER")
+        return 
+               #１秒ずつ減る
     #delta = {"Up"   : [0,-20],
     #         "Down" : [0,+20],
     #         "Left" : [-20,0],
@@ -43,7 +48,7 @@ def main_proc():
 
 
 if __name__ == "__main__":
-    time = 60
+    time = 10
     root = tk.Tk()
     #root.geometry("1500x900")
     #root.configure(bg="black")
