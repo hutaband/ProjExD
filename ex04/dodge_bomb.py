@@ -71,6 +71,25 @@ def main():
         
         #練習8
         if kkimg_rct.colliderect(bmimg_rct) == True:
+            bakuimg_sfc = pg.image.load("fig/bakuha.gif")
+            bakuimg_sfc.set_colorkey((255,255,255))
+           # bakuimg_sfc = pg.transform.rotozoom(finimg_sfc, 0, )
+            bakuimg_rct = bakuimg_sfc.get_rect()
+            bakuimg_rct.center = kkimg_rct.center
+            screen_sfc.blit(bakuimg_sfc,bakuimg_rct)
+            pg.display.update()
+            pg.time.wait(100)
+            finimg_sfc = pg.image.load("fig/fin.png")
+            #finimg_sfc.set_colorkey((0,0,0))
+            finimg_sfc = pg.transform.rotozoom(finimg_sfc, 0, 1.5)
+            finimg_rct = finimg_sfc.get_rect()
+            
+            finimg_rct.center = kkimg_rct.center
+            screen_sfc.blit(finimg_sfc,finimg_rct)
+            #pg.Surface.blit("fig/images.jpg",)
+            
+            pg.display.update()
+            pg.time.wait(1300)
             return 
 
         pg.display.update()
@@ -94,6 +113,7 @@ def check_bound(rct, scr_rct):
 
 
 if __name__ == "__main__":
+    clock2 = pg.time.Clock()
     pg.init()
     main() #これから実装するゲームのメインの部分
     pg.quit()
