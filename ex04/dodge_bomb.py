@@ -67,12 +67,16 @@ def main():
         #練習7
         yoko, tate = check_bound(bmimg_rct, screen_rct)
         vx *= yoko
-        vy *= tate   
+        vy *= tate  
+        
+        #練習8
+        if kkimg_rct.colliderect(bmimg_rct) == True:
+            return 
 
         pg.display.update()
         clock.tick(1000)
 
-
+#練習7
 def check_bound(rct, scr_rct):
     """
     [1] rct: こうかとん or 爆弾のRect
