@@ -98,28 +98,28 @@ class Bomb2:
         self.blit(scr)
 
 
-class Shot:
+class Shot: # ビームを発射するクラス
     def __init__(self,chr: Bird):
-        self.sfc = pg.image.load("fig/beam.png") 
+        self.sfc = pg.image.load("fig/beam.png") # 画像読み込み
         self.sfc = pg.transform.rotozoom(self.sfc, 0, 0.1)
         self.rct = self.sfc.get_rect() # Rect
-        self.rct.center = chr.rct.center
+        self.rct.center = chr.rct.center #発射位置
 
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
 
     def update(self, scr: Screen):
-        self.rct.move_ip(+10,0)
+        self.rct.move_ip(+10,0) #移動スピード
         self.blit(scr)
 
-class Boss:
+class Boss:  #ボスの表示
     def __init__(self, image, size:float, vxy, scr: Screen):
-        self.sfc = pg.image.load(image) 
+        self.sfc = pg.image.load(image)  #ボスの写真
         self.sfc = pg.transform.rotozoom(self.sfc, 0, 0.5)
         self.rct = self.sfc.get_rect() # Rect
-        self.rct.centerx = random.randint(0, scr.rct.width)
+        self.rct.centerx = random.randint(0, scr.rct.width) #ランダムで出現
         self.rct.centery = random.randint(0, scr.rct.height)
-        self.vx, self.vy = vxy # 練習6
+        self.vx, self.vy = vxy # 練習6 # 動き
 
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -127,7 +127,7 @@ class Boss:
     def update(self, scr: Screen):
         self.rct.move_ip(self.vx, self.vy)
         yoko, tate = check_bound(self.rct, scr.rct)
-        self.vx *= yoko
+        self.vx *= yoko # 画面内を動く
         self.vy *= tate
         self.blit(scr)
 
@@ -150,7 +150,7 @@ def main():
             if event.type == pg.QUIT:
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                beam = Shot(kkt)
+                beam = Shot(kkt) # スペースが押さるとビームが発射される
  
 
 
@@ -163,7 +163,7 @@ def main():
             beam.update(scr)
             if check_bound(beam.rct,scr.rct) != (1,1):
                 beam = None
-            if tkt.rct.colliderect(beam.rct):
+            if tkt.rct.colliderect(beam.rct): # 敵がビームにあった時の判定
                 beam = None
                 pass
                 pg.time.wait(300) 
@@ -173,7 +173,7 @@ def main():
             return
         if kkt.rct.colliderect(bkd.rct):
             return
-        if kkt.rct.colliderect(bkd2.rct):
+        if kkt.rct.colliderect(bkd2.rct): # ボムとこうかとんがあたった時の判定
             return
         #if tkt.rct.colliderect(beam.rct):
         #    return
