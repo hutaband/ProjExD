@@ -4,7 +4,7 @@ import pygame as pg
 
 
 class Screen:
-    def __init__(self, title, wh, image):
+    def __init__(self, title, wh, image):  #初期メソッド
         pg.display.set_caption(title)
         self.sfc = pg.display.set_mode(wh)     # Surface
         self.rct = self.sfc.get_rect()         # Rect
@@ -56,7 +56,9 @@ class Racket:
         self.blit(scr)
 
 
+
 class Ball:
+
     def __init__(self, fname, rack,mato,mato2):#初期化メソッド
         self.image = pg.image.load(fname).convert_alpha()#写真をロード
         self.image = pg.transform.scale(self.image,(50,50))#self.imageの拡大率
@@ -69,7 +71,6 @@ class Ball:
 
     def ball_move(self, scr: Screen):#ボールの動きについて
         global score
-
         self.rct.centerx += int(self.v_x)#x座標の動き
         self.rct.centery += int(self.v_y)#y座標の動き
 
@@ -84,6 +85,7 @@ class Ball:
             self.v_y = -self.v_y
 
         if self.rct.colliderect(self.racket.rct):#こうかとんと、バーの判定
+
             dist = self.rct.centerx - self.racket.rct.centerx
             if dist < -1:
                 self.v_x =-2 #-2*(2+dist/200/2)
@@ -108,21 +110,24 @@ class Ball:
             self.v_y+= 1#動きを加速させる
             score += 500    
 
+
         if self.rct.top > scr.rct.bottom:#こうかとんの頭が画面外にいった場合
+
             font = pg.font.Font(None, 100)
             text = font.render("GAME OVER", True,(255,0,0))
             scr.text_blit(text, 370,200)
 
 
-    def draw(self, sfc):
+    def draw(self, sfc): #ボールの描画
         sfc.blit(self.image, self.rct)
 
 
-    def update(self,scr:Screen):
+    def update(self,scr:Screen): #更新
         scr.sfc.blit(self.image,self.rct)
 
-def main():
+def main(): #メイン関数
     clock = pg.time.Clock()
+
     scr = Screen("squash", (1100, 600), "fig/haikei.png")
     rack = Racket("fig/bou3.png",0.08,(550,550))
     mato =  Mato("fig/mato1.png",0.5,(random.randint(240,550),110))
@@ -150,13 +155,13 @@ def main():
         pg.display.update()
         clock.tick(1000)
 
-def check_bound(rct, scr_rct):
+def check_bound(rct, scr_rct): #バーと壁の判定
     yoko, tate = +1, +1 # 領域内
     if rct.left < scr_rct.left or scr_rct.right  < rct.right : yoko = -1 # 領域外
     if rct.top  < scr_rct.top  or scr_rct.bottom < rct.bottom: tate = -1 # 領域外
     return yoko, tate
 
-if __name__ == "__main__":
+if __name__ == "__main__": #関数の呼び出し
     pg.init()
     score = 0
     main()
