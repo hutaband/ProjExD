@@ -23,6 +23,16 @@ class Mato:#的のクラス
         self.sfc = pg.transform.rotozoom(self.sfc, 0, size)  # Surface
         self.rct = self.sfc.get_rect()          # Rect
         self.rct.center = xy
+        self.matox = 1
+
+    def mato_move(self, scr:Screen):
+        self.rct.centerx += int(self.matox)
+        if self.rct.left < scr.rct.left:
+            self.rct.left = scr.rct.left
+            self.matox = -self.matox
+        if self.rct.right > scr.rct.right:
+            self.rct.right = scr.rct.right
+            self.matox = -self.matox
 
     def blit(self, scr: Screen):#貼り付け
         scr.sfc.blit(self.sfc, self.rct)
@@ -147,6 +157,8 @@ def main(): #メイン関数
             if event.type == pg.QUIT: return
         
         ball.ball_move(scr)
+        mato.mato_move(scr)
+        mato2.mato_move(scr)
         rack.update(scr)
         mato.update(scr)
         mato2.update(scr)
