@@ -54,57 +54,55 @@ class Racket:
     def update(self, scr: Screen):
         key_states = pg.key.get_pressed()
         if key_states[pg.K_LEFT]: 
-            self.rct.centerx -= 5
+            self.rct.centerx -= 2
         if key_states[pg.K_RIGHT]: 
-            self.rct.centerx += 5
+            self.rct.centerx += 2
         
         if check_bound(self.rct, scr.rct) != (1, 1): # 領域外だったら
             if key_states[pg.K_LEFT]: 
-                self.rct.centerx += 5
+                self.rct.centerx += 2
             if key_states[pg.K_RIGHT]: 
-                self.rct.centerx -= 5
+                self.rct.centerx -= 2
         self.blit(scr)
 
 
 
 class Ball:
-    def __init__(self, fname, rack,mato,mato2):
 
+    def __init__(self, fname, rack,mato,mato2):#初期化メソッド
+        self.image = pg.image.load(fname).convert_alpha()#写真をロード
+        self.image = pg.transform.scale(self.image,(50,50))#self.imageの拡大率
+        self.rct = self.image.get_rect()#rectを表示
+        self.v_x = 2#初期のxの座標
+        self.v_y = 2#初期のyの座標
+        self.racket = rack#rackを参照
+        self.mato = mato#matoを参照
+        self.mato2 = mato2#mato2を参照
 
-        self.image = pg.image.load(fname).convert_alpha()
-        self.image = pg.transform.scale(self.image,(50,50))
-        self.rct = self.image.get_rect()
-        self.v_x = 2
-        self.v_y = 2
-        self.racket = rack
-        self.mato = mato
-        self.mato2 = mato2
-
-
-    def ball_move(self, scr: Screen):
+    def ball_move(self, scr: Screen):#ボールの動きについて
         global score
+        self.rct.centerx += int(self.v_x)#x座標の動き
+        self.rct.centery += int(self.v_y)#y座標の動き
 
-        self.rct.centerx += int(self.v_x)
-        self.rct.centery += int(self.v_y)
-
-        if self.rct.left < scr.rct.left:
+        if self.rct.left < scr.rct.left:#左側のボール判定
             self.rct.left = scr.rct.left
             self.v_x = -self.v_x
-        if self.rct.right > scr.rct.right:
+        if self.rct.right > scr.rct.right:#右側のボール判定
             self.rct.right = scr.rct.right
             self.v_x = -self.v_x
-        if self.rct.top < scr.rct.top:
+        if self.rct.top < scr.rct.top:#上側のボール判定
             self.rct.top = scr.rct.top
             self.v_y = -self.v_y
 
-        if self.rct.colliderect(self.racket.rct): #ボールとバーの衝突
+        if self.rct.colliderect(self.racket.rct):#こうかとんと、バーの判定
+
             dist = self.rct.centerx - self.racket.rct.centerx
             if dist < -1:
                 self.v_x =-2 #-2*(2+dist/200/2)
             elif dist > 1:
                 self.v_x = 2 #2*(2-dist/200/2)
             else:
-                self.v_x = random.randint(-5,5)
+                self.v_x = random.randint(-2,2)
             self.v_y = -self.v_y
 
         if self.rct.colliderect(self.mato.rct):#的1の判定
@@ -113,6 +111,7 @@ class Ball:
             self.v_x+= 0.2#動きを加速させる
             self.v_y+= 0.2#動きを加速させる
             score += 100
+            
 
         if self.rct.colliderect(self.mato2.rct):#的2の判定
             self.v_x *= -1#-1をかけて反転する
@@ -121,10 +120,12 @@ class Ball:
             self.v_y+= 1#動きを加速させる
             score += 500    
 
-        if self.rct.bottom > scr.rct.bottom: #ボールが画面の下に行った場合
+
+        if self.rct.top > scr.rct.bottom:#こうかとんの頭が画面外にいった場合
+
             font = pg.font.Font(None, 100)
             text = font.render("GAME OVER", True,(255,0,0))
-            scr.text_blit(text, 400,200)
+            scr.text_blit(text, 370,200)
 
 
     def draw(self, sfc): #ボールの描画
@@ -139,7 +140,7 @@ def main(): #メイン関数
 
     scr = Screen("squash", (1100, 600), "fig/haikei.png")
     rack = Racket("fig/bou3.png",0.08,(550,550))
-    mato =  Mato("fig/mato1.png",0.5,(random.randint(220,550),110))
+    mato =  Mato("fig/mato1.png",0.5,(random.randint(240,550),110))
     mato2 = Mato("fig/mato1.png",0.3,(random.randint(600,900),120))
     ball = Ball("fig/0.png", rack,mato,mato2)
 
