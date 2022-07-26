@@ -23,6 +23,16 @@ class Mato:#的のクラス
         self.sfc = pg.transform.rotozoom(self.sfc, 0, size)  # Surface
         self.rct = self.sfc.get_rect()          # Rect
         self.rct.center = xy
+        self.matox = 1
+
+    def mato_move(self, scr:Screen):
+        self.rct.centerx += int(self.matox)
+        if self.rct.left < scr.rct.left:
+            self.rct.left = scr.rct.left
+            self.matox = -self.matox
+        if self.rct.right > scr.rct.right:
+            self.rct.right = scr.rct.right
+            self.matox = -self.matox
 
     def blit(self, scr: Screen):#貼り付け
         scr.sfc.blit(self.sfc, self.rct)
@@ -44,22 +54,30 @@ class Racket:
     def update(self, scr: Screen):  
         key_states = pg.key.get_pressed()
         if key_states[pg.K_LEFT]: 
-            self.rct.centerx -= 5   #レフトキーが押されると、バーが-5移動される
+            self.rct.centerx -= 2
         if key_states[pg.K_RIGHT]: 
-            self.rct.centerx += 5   #ライトキーが押されると、バーが　5移動される
+            self.rct.centerx += 2
         
         if check_bound(self.rct, scr.rct) != (1, 1): # 領域外だったら
             if key_states[pg.K_LEFT]: 
-                self.rct.centerx += 5   #バーが左の画面外に行くと、ストップする
+                self.rct.centerx += 2
             if key_states[pg.K_RIGHT]: 
-                self.rct.centerx -= 5   #バーが右の画面外に行くと、ストップする
+                self.rct.centerx -= 2
         self.blit(scr)
 
 
 
 class Ball:
-    def __init__(self, fname, rack,mato,mato2):
 
+    def __init__(self, fname, rack,mato,mato2):#初期化メソッド
+        self.image = pg.image.load(fname).convert_alpha()#写真をロード
+        self.image = pg.transform.scale(self.image,(50,50))#self.imageの拡大率
+        self.rct = self.image.get_rect()#rectを表示
+        self.v_x = 2#初期のxの座標
+        self.v_y = 2#初期のyの座標
+        self.racket = rack#rackを参照
+        self.mato = mato#matoを参照
+        self.mato2 = mato2#mato2を参照
 
         self.image = pg.image.load(fname).convert_alpha()
         self.image = pg.transform.scale(self.image,(50,50))
@@ -87,14 +105,15 @@ class Ball:
             self.rct.top = scr.rct.top
             self.v_y = -self.v_y
 
-        if self.rct.colliderect(self.racket.rct): #ボールとバーの衝突
+        if self.rct.colliderect(self.racket.rct):#こうかとんと、バーの判定
+
             dist = self.rct.centerx - self.racket.rct.centerx
             if dist < -1:
                 self.v_x =-2 #速度反転
             elif dist > 1:
                 self.v_x = 2 #速度反転
             else:
-                self.v_x = random.randint(-5,5)
+                self.v_x = random.randint(-2,2)
             self.v_y = -self.v_y
 
         if self.rct.colliderect(self.mato.rct):#的1の判定
@@ -103,6 +122,7 @@ class Ball:
             self.v_x+= 0.2#動きを加速させる
             self.v_y+= 0.2#動きを加速させる
             score += 100
+            
 
         if self.rct.colliderect(self.mato2.rct):#的2の判定
             self.v_x *= -1#-1をかけて反転する
@@ -111,10 +131,12 @@ class Ball:
             self.v_y+= 1#動きを加速させる
             score += 500    
 
-        if self.rct.bottom > scr.rct.bottom: #ボールが画面の下に行った場合
+
+        if self.rct.top > scr.rct.bottom:#こうかとんの頭が画面外にいった場合
+
             font = pg.font.Font(None, 100)
             text = font.render("GAME OVER", True,(255,0,0))
-            scr.text_blit(text, 400,200)
+            scr.text_blit(text, 370,200)
 
 
     def draw(self, sfc): #ボールの描画
@@ -148,6 +170,8 @@ def main(): #メイン関数
             if event.type == pg.QUIT: return
         
         ball.ball_move(scr)
+        mato.mato_move(scr)
+        mato2.mato_move(scr)
         rack.update(scr)
         mato.update(scr)
         mato2.update(scr)
