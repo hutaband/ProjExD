@@ -91,9 +91,9 @@ class Ball:  #ボール生成
 
 def main(): #メイン関数
     clock = pg.time.Clock()
-    scr = Screen("squash", (1200, 600), "fig/haikei.png") #スクリーン設定
-    rack = Racket("fig/beam.png",0.08,(550,550)) #バーの設定
-    ball = Ball("fig/boss.png", rack) #ボールの設定
+    scr = Screen("squash", (1200, 600), "fig/bg.png") #スクリーン設定
+    rack = Racket("fig/0.png",1.0,(550,550)) #バーの設定
+    ball = Ball("fig/0.png", rack) #ボールの設定
 
     while True:
         scr.blit()
