@@ -4,12 +4,12 @@ import pygame as pg
 
 
 class Screen:
-    def __init__(self, title, wh, image):  #初期メソッド
+    def __init__(self, title, wh, image):  
         pg.display.set_caption(title)
-        self.sfc = pg.display.set_mode(wh)     # Surface
-        self.rct = self.sfc.get_rect()         # Rect
-        self.bgi_sfc = pg.image.load(image)    # Surface
-        self.bgi_rct = self.bgi_sfc.get_rect() # Rect
+        self.sfc = pg.display.set_mode(wh)     #
+        self.rct = self.sfc.get_rect()         
+        self.bgi_sfc = pg.image.load(image)    
+        self.bgi_rct = self.bgi_sfc.get_rect() 
 
     def blit(self):
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
